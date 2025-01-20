@@ -15,6 +15,7 @@ public class Main {
 
         Options options = new Options();
         options.addOption("i", true, "Input file for the maze");
+        options.addOption("p", true, "Input string for a path");
 
         CommandLineParser parser = new DefaultParser();
 
@@ -22,20 +23,38 @@ public class Main {
         try {
             CommandLine cmd = parser.parse(options, args);
             String maze_file = cmd.getOptionValue("i");
+            String path_string = cmd.getOptionValue("p");
 
             logger.info("**** Reading the maze from file " + maze_file);
-            BufferedReader reader = new BufferedReader(new FileReader(maze_file));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                for (int idx = 0; idx < line.length(); idx++) {
-                    if (line.charAt(idx) == '#') {
-                        System.out.print("WALL ");
-                    } else if (line.charAt(idx) == ' ') {
-                        System.out.print("PASS ");
+            Maze maze = new Maze(maze_file);
+            int[][] my_maze = maze.getMaze();
+            boolean canon = true;
+            if (path_string != null) {
+                logger.info("**** Checking type of path input");
+                for(int i = 0; i < path_string.length(); i++) {
+                    if(path_string.charAt(i) != 'F' && path_string.charAt(i) != 'L' && path_string.charAt(i) != 'R') {
+                        canon = false;
+                        break;
                     }
                 }
-                System.out.print(System.lineSeparator());
+                logger.info("**** Checking if path is valid");
+                if (canon == true) {
+                    Explorer path_checker = new CanonicalExplorer(path_string,my_maze);
+                    if (path_checker.explore() == true) {
+                        System.out.println("Valid path");
+                    } else {
+                        System.out.println("Not a valid path");
+                    }    
+                } else {
+                    Explorer path_checker = new FactorizedExplorer(path_string,my_maze);
+                    if (path_checker.explore() == true) {
+                        System.out.println("Valid path");
+                    } else {
+                        System.out.println("Not a valid path");
+                    }
+                }
             }
+            maze.printMaze();
         } catch(Exception e) {
             logger.error("/!\\ An error has occured /!\\");
         }
