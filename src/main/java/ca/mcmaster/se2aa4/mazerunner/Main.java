@@ -19,6 +19,8 @@ public class Main {
 
         CommandLineParser parser = new DefaultParser();
 
+        FactorConvert converter = new FactorConvert();
+
         logger.info("** Starting Maze Runner");
         try {
             CommandLine cmd = parser.parse(options, args);
@@ -30,7 +32,7 @@ public class Main {
             int[][] my_maze = maze.getMaze();
             boolean canon = true;
             if (path_string != null) {
-                logger.info("**** Checking type of path input");
+                logger.trace("**** Checking type of path input");
                 for(int i = 0; i < path_string.length(); i++) {
                     if(path_string.charAt(i) != 'F' && path_string.charAt(i) != 'L' && path_string.charAt(i) != 'R') {
                         canon = false;
@@ -38,20 +40,14 @@ public class Main {
                     }
                 }
                 logger.info("**** Checking if path is valid");
-                if (canon == true) {
-                    Explorer path_checker = new CanonicalExplorer(path_string,my_maze);
-                    if (path_checker.explore() == true) {
-                        System.out.println("Valid path");
-                    } else {
-                        System.out.println("Not a valid path");
-                    }    
+                if (canon != true) {
+                    path_string = converter.toCanon(path_string);  
+                }
+                Explorer path_checker = new Explorer(path_string,my_maze);
+                if (path_checker.explore() == true) {
+                    System.out.println("Valid path");
                 } else {
-                    Explorer path_checker = new FactorizedExplorer(path_string,my_maze);
-                    if (path_checker.explore() == true) {
-                        System.out.println("Valid path");
-                    } else {
-                        System.out.println("Not a valid path");
-                    }
+                    System.out.println("Not a valid path");
                 }
             }
             maze.printMaze();
