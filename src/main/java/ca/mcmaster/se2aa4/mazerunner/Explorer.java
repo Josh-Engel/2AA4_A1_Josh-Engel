@@ -25,7 +25,8 @@ public class Explorer {
         for (int i = 0; i < maze.length; i++) {
             if (maze[i][0] == 0) {
                 entrances[0] = i;
-            } else if (maze[i][maze[0].length-1] == 0) {
+            } 
+            if (maze[i][maze[0].length-1] == 0) {
                 entrances[1] = i;
             }
         }

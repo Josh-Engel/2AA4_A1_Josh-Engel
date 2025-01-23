@@ -29,7 +29,7 @@ public class StraightLineAlgorithm implements PathAlgorithm {
                     throw new IllegalStateException("/!\\ Path could not be computed /!\\");
                 }
             }
-            for (int j = 0; j < length; j++) {
+            for (int j = 1; j < length; j++) {
                 path.append("F");
             }
             return path.toString();
@@ -40,12 +40,13 @@ public class StraightLineAlgorithm implements PathAlgorithm {
     }
 
     public int[] findEntrances () {
-        logger.trace("**** Finding entrances");
+        logger.trace("**** Finding valid entrances");
         int[] entrances = new int[2];
-        for (int i = 0; i < this.maze.length; i++) {
+        for (int i = 0; i < maze.length; i++) {
             if (maze[i][0] == 0) {
                 entrances[0] = i;
-            } else if (this.maze[i][this.maze[0].length-1] == 0) {
+            } 
+            if (maze[i][maze[0].length-1] == 0) {
                 entrances[1] = i;
             }
         }
