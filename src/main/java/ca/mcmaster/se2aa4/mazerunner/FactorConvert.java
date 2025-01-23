@@ -10,10 +10,13 @@ public class FactorConvert {
 
     private static final Logger logger = LogManager.getLogger();
     
+    //constructor
     public FactorConvert() {
     }
 
+    //converts from factorized to canon path
     public String toCanon(String path) {
+        logger.trace("**** Converting to canon");
         StringBuffer canon = new StringBuffer();
         int num = 0;
         for (int i = 0; i < path.length(); i++) {
@@ -21,7 +24,6 @@ public class FactorConvert {
                 //finds factorized number
                 while (path.charAt(i) != 'F' && path.charAt(i) != 'L' && path.charAt(i) != 'R') {
                     num = num * 10 + (path.charAt(i) - '0');
-                    System.out.println(num);
                     i++;
                 }
                 int idx = 0;
@@ -38,21 +40,25 @@ public class FactorConvert {
         return canon.toString();
     }
 
+    //converts from canon to factorized path
     public String toFactor(String path) {
+        logger.trace("**** Converting to factorized");
         StringBuffer factor = new StringBuffer();
         int count = 1;
         for (int i = 0; i < path.length() - 1; i++) {
             if (path.charAt(i) == path.charAt(i+1)) {
                 count++;
             } else {
-                for (int j = 0; j < count; j++) {
-                    factor.append(path.charAt(i));
-                }
-                if (i == path.length() - 2) {
-                    factor.append(path.charAt(i+1));
-                }
+                factor.append(count);
+                factor.append(path.charAt(i));
                 count = 1;
             }
+        }
+        if (path.charAt(path.length() - 1) != path.charAt(path.length() - 2)) {
+            factor.append(path.charAt(path.length() - 1));
+        } else {
+            factor.append(count);
+            factor.append(path.charAt(path.length() - 1));
         }
         return factor.toString();
     }

@@ -11,6 +11,7 @@ public class Main {
 
     private static final Logger logger = LogManager.getLogger();
 
+    //runs the mazerunner program
     public static void main(String[] args) {
 
         Options options = new Options();
@@ -31,6 +32,9 @@ public class Main {
             Maze maze = new Maze(maze_file);
             int[][] my_maze = maze.getMaze();
             boolean canon = true;
+
+            maze.printMaze();
+
             if (path_string != null) {
                 logger.trace("**** Checking type of path input");
                 for(int i = 0; i < path_string.length(); i++) {
@@ -49,13 +53,16 @@ public class Main {
                 } else {
                     System.out.println("Not a valid path");
                 }
+            } else {
+                logger.info("**** Computing path");
+                PathAlgorithm straight_line_algorithm = new StraightLineAlgorithm(my_maze);
+                String computed_path = straight_line_algorithm.findPath();
+                System.out.println("Canon path: " + computed_path);
+                System.out.println("Factorized path: " + converter.toFactor(computed_path));
             }
-            maze.printMaze();
         } catch(Exception e) {
             logger.error("/!\\ An error has occured /!\\");
         }
-        logger.info("**** Computing path");
-        logger.warn("PATH NOT COMPUTED");
         logger.info("** End of MazeRunner");
     }
 }

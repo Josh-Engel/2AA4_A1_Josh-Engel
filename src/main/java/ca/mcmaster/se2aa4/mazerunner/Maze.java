@@ -13,8 +13,10 @@ public class Maze {
 
     private static final Logger logger = LogManager.getLogger();
 
+    //constructor
     public Maze (String maze_file) {
         try {
+            logger.trace("**** Creating maze array");
             BufferedReader index = new BufferedReader(new FileReader(maze_file));
             String line;
             this.width = 0;
@@ -41,14 +43,15 @@ public class Maze {
                 line_idx++;
             }
         } catch(Exception e) {
-            logger.error("/!\\ An error has occured /!\\");
+            logger.error("/!\\ Maze could nto be created /!\\");
         }
     }
-
+     //returns the maze
     public int[][] getMaze() {
         return this.maze;
     }
 
+    //prints out the maze
     public void printMaze() {
         for (int i = 0; i < height; i++) {
             System.out.print("\n");
