@@ -49,7 +49,9 @@ public class FactorConvert {
             if (path.charAt(i) == path.charAt(i+1)) {
                 count++;
             } else {
-                factor.append(count);
+                if (count > 1) {
+                    factor.append(count);
+                }
                 factor.append(path.charAt(i));
                 count = 1;
             }

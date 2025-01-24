@@ -55,8 +55,10 @@ public class Main {
                 }
             } else {
                 logger.info("**** Computing path");
-                PathAlgorithm straight_line_algorithm = new StraightLineAlgorithm(my_maze);
-                String computed_path = straight_line_algorithm.findPath();
+                //PathAlgorithm straight_line_algorithm = new StraightLineAlgorithm(my_maze);
+                //String computed_path = straight_line_algorithm.findPath();
+                PathAlgorithm right_hand_algorithm = new RightHandAlgorithm(my_maze);
+                String computed_path = right_hand_algorithm.findPath();
                 System.out.println("Canon path: " + computed_path);
                 System.out.println("Factorized path: " + converter.toFactor(computed_path));
             }

@@ -43,7 +43,7 @@ public class Maze {
                 line_idx++;
             }
         } catch(Exception e) {
-            logger.error("/!\\ Maze could nto be created /!\\");
+            logger.error("/!\\ Maze could not be created /!\\");
         }
     }
      //returns the maze

@@ -62,15 +62,9 @@ public class Explorer {
                     } else if (instruction == 'R') {
                         direction.turnRight();
                     } else {
-                        if (direction.getDirection() == 'N') {
-                            height_idx--;
-                        } else if (direction.getDirection() == 'E') {
-                            width_idx++;
-                        } else if (direction.getDirection() == 'S') {
-                            height_idx++;
-                        } else {
-                            width_idx--;
-                        }
+                        int[] dir_vector= direction.getDirVector();
+                        height_idx += dir_vector[1];
+                        width_idx += dir_vector[0];
                     }
                     if (maze[height_idx][width_idx] == 1) {
                         break;

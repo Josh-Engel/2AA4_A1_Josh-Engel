@@ -42,4 +42,22 @@ public class Direction {
     public char getDirection () {
         return direction;
     }
+
+    public int[] getDirVector () {
+        int[] dir_vector = new int[2];
+        if (direction == 'N') {
+            dir_vector[0] = 0;
+            dir_vector[1] = -1;
+        } else if (direction == 'E') {
+            dir_vector[0] = 1;
+            dir_vector[1] = 0;
+        } else if (direction == 'S') {
+            dir_vector[0] = 0;
+            dir_vector[1] = 1;
+        } else {
+            dir_vector[0] = -1;
+            dir_vector[1] = 0;
+        }
+        return dir_vector;
+    }
 }
