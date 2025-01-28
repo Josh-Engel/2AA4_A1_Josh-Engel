@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class StraightLineAlgorithm implements PathAlgorithm {
-    int[][] maze;
+    private int[][] maze;
 
     private static final Logger logger = LogManager.getLogger();
 
