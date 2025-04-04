@@ -1,7 +1,6 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,6 +41,7 @@ public class Maze {
                 }
                 line_idx++;
             }
+            reader.close();
         } catch(Exception e) {
             logger.error("/!\\ Maze could not be created /!\\");
         }
@@ -64,5 +64,35 @@ public class Maze {
             }
         }
         System.out.print("\n");
+    }
+
+    //finds the entrances to the maze
+    public int[] findEntrances () {
+        logger.trace("**** Finding valid entrances");
+        int[] entrances = new int[2];
+        for (int i = 0; i < maze.length; i++) {
+            if (maze[i][0] == 0) {
+                entrances[0] = i;
+            } 
+            if (maze[i][maze[0].length-1] == 0) {
+                entrances[1] = i;
+            }
+        }
+        return entrances;
+    }
+
+    public int getCoordInstance(int xcoord, int ycoord) {
+        if(xcoord < 0 || ycoord < 0 || xcoord >= maze[0].length || ycoord >= maze.length) {
+            return 2;
+        }
+        return maze[ycoord][xcoord];
+    }
+
+    public int getWidth() {
+        return maze[0].length;
+    }
+
+    public int getHeight() {
+        return maze.length;
     }
 }

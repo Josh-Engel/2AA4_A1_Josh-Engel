@@ -1,79 +1,79 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ca.mcmaster.se2aa4.mazerunner.commands.CommandList;
+import ca.mcmaster.se2aa4.mazerunner.status.Coordinates;
+import ca.mcmaster.se2aa4.mazerunner.status.Direction;
+import ca.mcmaster.se2aa4.mazerunner.observers.*;
 
 public class Explorer {
     private String path;
-    private int[][] maze;
+    private Maze maze;
+    private final List<Observer> observers;
+    private CommandList commandList;
 
     private static final Logger logger = LogManager.getLogger();
 
     //constructor
-    public Explorer (String path, int[][] maze) {
+    public Explorer (String path, Maze my_maze, List<Observer> observers, CommandList commandList) {
         this.path = path;
-        this.maze = maze;
-    }
-
-    //finds the entrances to the maze
-    public int[] findEntrances () {
-        logger.trace("**** Finding valid entrances");
-        int[] entrances = new int[2];
-        for (int i = 0; i < maze.length; i++) {
-            if (maze[i][0] == 0) {
-                entrances[0] = i;
-            } 
-            if (maze[i][maze[0].length-1] == 0) {
-                entrances[1] = i;
-            }
-        }
-        return entrances;
+        maze = my_maze;
+        this.observers = observers;
+        this.commandList = commandList;
     }
 
     //checks for validity of path
     public boolean explore () {
         try {
             int error = 0;
-            int height_idx = 0;
-            int width_idx = 0;
-            int exit_height = 0;
-            int exit_width = 0;
-            int[] entrances = findEntrances();
-            height_idx = entrances[0];
-            exit_height = entrances[1];
-            exit_width = maze[0].length-1;
-            Direction direction = new Direction('E');
+            int[] entrances = maze.findEntrances();
+            Integer[] integer_entrance = new Integer[2];
+            integer_entrance[0] = 0;
+            integer_entrance[1] = entrances[0];
+            commandList.getCommand("setCoordinates").execute(integer_entrance, ' ');
+
+            int exit_height = entrances[1];
+            int exit_width = maze.getWidth()-1;
             logger.trace("**** Moving through the maze");
             for (int j = 0; j <2 ; j++) {
                 if (j == 1) {
-                    direction.setDirection('W');
-                    height_idx = entrances[1];
-                    width_idx = maze[0].length-1;
+                    commandList.getCommand("setDirection").execute(null, 'W');
+                    integer_entrance[1] = entrances[1];
+                    integer_entrance[0] = maze.getWidth()-1;
+                    commandList.getCommand("setCoordinates").execute(integer_entrance, ' ');
                     exit_height = entrances[0];
                     exit_width = 0;
                 }
                 for (int i = 0; i < path.length(); i++) {
                     char instruction = path.charAt(i);
                     if (instruction == 'L') {
-                        direction.turnLeft();
+                        commandList.getCommand("setPreviousMove").execute(null,'L');
                     } else if (instruction == 'R') {
-                        direction.turnRight();
+                        commandList.getCommand("setPreviousMove").execute(null,'R');
                     } else {
-                        int[] dir_vector= direction.getDirVector();
-                        height_idx += dir_vector[1];
-                        width_idx += dir_vector[0];
+                        commandList.getCommand("setPreviousMove").execute(null,'F');
                     }
-                    if (maze[height_idx][width_idx] == 1) {
+
+                    char previous_move = (Character) commandList.getCommand("getPreviousMove").execute(null, ' ');
+                    for(Observer observer: observers) {
+                        observer.updateStatus((Direction) commandList.getCommand("getDirection").execute(null, ' '),
+                            (Coordinates) commandList.getCommand("getCoordinates").execute(null, ' '), previous_move);
+                    }
+                    int[] current_coords = new int[2];
+                    current_coords[0] = ((Coordinates) commandList.getCommand("getCoordinates").execute(null,' ')).getCoords()[0];
+                    current_coords[1] = ((Coordinates) commandList.getCommand("getCoordinates").execute(null,' ')).getCoords()[1];
+                    
+                    if (maze.getCoordInstance(current_coords[0],current_coords[1]) == 1) {
                         break;
                     }
                 }
-                if (height_idx != exit_height || width_idx != exit_width) {
-                    error++;
+                if (((Coordinates) commandList.getCommand("getCoordinates").execute(null,' ')).getCoords()[1] != exit_height 
+                    || ((Coordinates) commandList.getCommand("getCoordinates").execute(null,' ')).getCoords()[0] != exit_width) {
+                        error++;
                 }
-                
             }
             if (error > 1) {
                 return false;

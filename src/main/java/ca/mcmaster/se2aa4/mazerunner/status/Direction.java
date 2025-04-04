@@ -1,12 +1,7 @@
-package ca.mcmaster.se2aa4.mazerunner;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+package ca.mcmaster.se2aa4.mazerunner.status;
 
 public class Direction {
     private char direction;
-
-    private static final Logger logger = LogManager.getLogger();
 
     public Direction (char direction) {
         this.direction = direction;
@@ -39,25 +34,19 @@ public class Direction {
         }
     }
 
-    public char getDirection () {
-        return direction;
+    public void uTurn () {
+        if (direction == 'N') {
+            direction = 'S';
+        } else if (direction == 'E') {
+            direction = 'W';
+        } else if (direction == 'S') {
+            direction = 'N';
+        } else {
+            direction = 'E';
+        }
     }
 
-    public int[] getDirVector () {
-        int[] dir_vector = new int[2];
-        if (direction == 'N') {
-            dir_vector[0] = 0;
-            dir_vector[1] = -1;
-        } else if (direction == 'E') {
-            dir_vector[0] = 1;
-            dir_vector[1] = 0;
-        } else if (direction == 'S') {
-            dir_vector[0] = 0;
-            dir_vector[1] = 1;
-        } else {
-            dir_vector[0] = -1;
-            dir_vector[1] = 0;
-        }
-        return dir_vector;
+    public char getDirection () {
+        return direction;
     }
 }

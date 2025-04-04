@@ -1,11 +1,12 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
 import org.apache.commons.cli.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import ca.mcmaster.se2aa4.mazerunner.initiaters.AlgorithmInitiater;
+import ca.mcmaster.se2aa4.mazerunner.initiaters.ExplorerInitiater;
 
 public class Main {
 
@@ -19,7 +20,6 @@ public class Main {
         options.addOption("p", true, "Input string for a path");
 
         CommandLineParser parser = new DefaultParser();
-
         FactorConvert converter = new FactorConvert();
 
         logger.info("** Starting Maze Runner");
@@ -30,35 +30,19 @@ public class Main {
 
             logger.info("**** Reading the maze from file " + maze_file);
             Maze maze = new Maze(maze_file);
-            int[][] my_maze = maze.getMaze();
-            boolean canon = true;
-
-            maze.printMaze();
 
             if (path_string != null) {
-                logger.trace("**** Checking type of path input");
-                for(int i = 0; i < path_string.length(); i++) {
-                    if(path_string.charAt(i) != 'F' && path_string.charAt(i) != 'L' && path_string.charAt(i) != 'R') {
-                        canon = false;
-                        break;
-                    }
-                }
-                logger.info("**** Checking if path is valid");
-                if (canon != true) {
-                    path_string = converter.toCanon(path_string);  
-                }
-                Explorer path_checker = new Explorer(path_string,my_maze);
-                if (path_checker.explore() == true) {
+                ExplorerInitiater explorerInitiater = new ExplorerInitiater();
+                explorerInitiater.initiate(path_string, maze);
+                if (explorerInitiater.getExplorer().explore() == true) {
                     System.out.println("Valid path");
                 } else {
                     System.out.println("Not a valid path");
                 }
             } else {
-                logger.info("**** Computing path");
-                //PathAlgorithm straight_line_algorithm = new StraightLineAlgorithm(my_maze);
-                //String computed_path = straight_line_algorithm.findPath();
-                PathAlgorithm right_hand_algorithm = new RightHandAlgorithm(my_maze);
-                String computed_path = right_hand_algorithm.findPath();
+                AlgorithmInitiater algorithmInitiater = new AlgorithmInitiater();
+                algorithmInitiater.initiate(path_string, maze);
+                String computed_path = algorithmInitiater.getAlgorithm().findPath();
                 System.out.println("Canon path: " + computed_path);
                 System.out.println("Factorized path: " + converter.toFactor(computed_path));
             }
