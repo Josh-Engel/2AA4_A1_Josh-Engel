@@ -8,9 +8,9 @@ import java.util.Map;
 //allows for less cumbersome command management
 public class CommandList {
     private Map<String, Command<?>> commandMap = new HashMap<>();
-    Coordinates coords;
-    Direction direction;
-    PreviousMove previous;
+    private Coordinates coords;
+    private Direction direction;
+    private PreviousMove previous;
 
     public CommandList(Direction dir, Coordinates coordinates, PreviousMove previous) {
         direction = dir;

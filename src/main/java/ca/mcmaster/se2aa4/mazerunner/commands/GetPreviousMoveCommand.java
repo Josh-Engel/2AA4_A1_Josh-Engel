@@ -3,7 +3,7 @@ package ca.mcmaster.se2aa4.mazerunner.commands;
 import ca.mcmaster.se2aa4.mazerunner.status.PreviousMove;
 
 public class GetPreviousMoveCommand implements Command<Character> {
-    PreviousMove previous;
+    private PreviousMove previous;
     
     public GetPreviousMoveCommand(PreviousMove prev) {
         previous = prev;

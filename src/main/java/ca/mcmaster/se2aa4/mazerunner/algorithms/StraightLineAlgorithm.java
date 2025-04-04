@@ -52,7 +52,7 @@ public class StraightLineAlgorithm implements PathAlgorithm {
                         (Coordinates) commandList.getCommand("getCoordinates").execute(null, ' '), previous_move);
                 }
             }
-            for (int j = 1; j < length; j++) {
+            for (int j = 0; j < length; j++) {
                 path.append("F");
             }
             return path.toString();

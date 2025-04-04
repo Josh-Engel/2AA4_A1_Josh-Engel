@@ -17,12 +17,12 @@ import ca.mcmaster.se2aa4.mazerunner.status.*;
 public class AlgorithmInitiater implements Initiater {
     private final List<Observer> observers = new ArrayList<>();
     private Direction direction = new Direction('E');
-    int[] initial_coords = new int[] {0,0};
+    private int[] initial_coords = new int[] {0,0};
     private Coordinates coords = new Coordinates(initial_coords);
     private PreviousMove previous = new PreviousMove();
     private CommandList commandList = new CommandList(direction, coords, previous);
 
-    PathAlgorithm algorithm;
+    private PathAlgorithm algorithm;
     private static final Logger logger = LogManager.getLogger();
     
     public void initiate(String pathString, Maze maze) {
